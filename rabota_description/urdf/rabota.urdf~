@@ -1,0 +1,259 @@
+<!-- -*- mode: XML -*- -->
+<robot
+  name="rabota">
+  <link
+    name="base_link">
+    <inertial>
+      <origin
+        xyz="0 0 0.23606"
+        rpy="0 0 0" />
+      <mass
+        value="1.2879" />
+      <inertia
+        ixx="0.051276"
+        ixy="0"
+        ixz="0"
+        iyy="0.05064"
+        iyz="0"
+        izz="0.0011371" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://rabota_description/meshes/base_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.89412 0.91373 0.92941 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://rabota_description/meshes/base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <link
+    name="slider_link">
+    <inertial>
+      <origin
+        xyz="-0.032492 0 2.7756E-17"
+        rpy="0 0 0" />
+      <mass
+        value="0.40096" />
+      <inertia
+        ixx="0.00081582"
+        ixy="0"
+        ixz="0"
+        iyy="0.00074408"
+        iyz="0"
+        izz="0.00019154" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://rabota_description/meshes/slider_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.89412 0.91373 0.92941 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://rabota_description/meshes/slider_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="slider_pris_joint"
+    type="prismatic">
+    <origin
+      xyz="0.035 0 0.065"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="slider_link" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="0"
+      upper="0.6"
+      effort="30"
+      velocity="0.4" />
+  </joint>
+  <link
+    name="link_1">
+    <inertial>
+      <origin
+        xyz="0.19958 0 -3.0531E-16"
+        rpy="0 0 0" />
+      <mass
+        value="0.28874" />
+      <inertia
+        ixx="0.00035977"
+        ixy="0"
+        ixz="0"
+        iyy="0.0079942"
+        iyz="0"
+        izz="0.0076559" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://rabota_description/meshes/link_1.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.89412 0.91373 0.92941 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://rabota_description/meshes/link_1.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="link_1_Rot_joint"
+    type="revolute">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="slider_link" />
+    <child
+      link="link_1" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-1.57"
+      upper="1.57"
+      effort="1.5"
+      velocity="8" />
+  </joint>
+  <link
+    name="link_2">
+    <inertial>
+      <origin
+        xyz="0.31959 0 0"
+        rpy="0 0 0" />
+      <mass
+        value="0.16837" />
+      <inertia
+        ixx="4.7161E-05"
+        ixy="0"
+        ixz="0"
+        iyy="0.0046023"
+        iyz="0"
+        izz="0.0045864" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://rabota_description/meshes/link_2.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.89412 0.91373 0.92941 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://rabota_description/meshes/link_2.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="link_2_Rot_joint"
+    type="fixed">
+    <origin
+      xyz="0.492 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="link_1" />
+    <child
+      link="link_2" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-1.57"
+      upper="1.57"
+      effort="1.5"
+      velocity="8" />
+  </joint>
+</robot>
+
+  <!-- ros_control plugin -->
+<gazebo> 
+  <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+    <robotNamespace>/rabota</robotNamespace> 
+  </plugin> 
+</gazebo>
+
+<transmission name="tran1">
+  <type>transmission_interface/SimpleTransmission</type>
+  <joint name="slider_pris_joint">
+    <hardwareInterface>EffortJointInterface</hardwareInterface>
+  </joint>
+  <actuator name="motor1">
+    <hardwareInterface>EffortJointInterface</hardwareInterface>
+    <mechanicalReduction>1</mechanicalReduction>
+  </actuator>
+</transmission>
+
+<transmission name="tran2">
+  <type>transmission_interface/SimpleTransmission</type>
+  <joint name="link_1_Rot_joint">
+   <hardwareInterface>EffortJointInterface</hardwareInterface>
+  </joint>
+  <actuator name="motor2">
+    <hardwareInterface>EffortJointInterface</hardwareInterface>
+    <mechanicalReduction>1</mechanicalReduction>
+  </actuator>
+</transmission>
+
+<transmission name="tran3">
+  <type>transmission_interface/SimpleTransmission</type>
+  <joint name="link_2_Rot_joint">
+    <hardwareInterface>EffortJointInterface</hardwareInterface>
+  </joint>
+  <actuator name="motor3">
+    <hardwareInterface>EffortJointInterface</hardwareInterface>
+    <mechanicalReduction>1</mechanicalReduction>
+  </actuator>
+</transmission>
+

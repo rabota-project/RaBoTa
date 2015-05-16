@@ -1,0 +1,19 @@
+<!-- -*- mode: XML -*- -->
+<launch>
+
+  <!-- Load the robot_hardware_interface node -->
+  <include file="$(find rabota_hardware_interface)/launch/rabota_hardware.launch">
+  </include>
+
+  <!-- Load example URDF -->
+  <param name="robot_description" command="cat $(find rabota_description)/urdf/rabota.urdf" />
+
+  <node pkg="tf" type="static_transform_publisher" name="base_link_broadcaster" args="0 0 0 0 0 0 1 world base_link 100" />
+
+
+  <!-- convert joint states to TF transforms for rviz, etc    
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" respawn="false" output="screen" >
+      <remap from="joint_states" to="/rabota/joint_states" />
+  </node>
+-->
+</launch>

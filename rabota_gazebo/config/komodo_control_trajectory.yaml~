@@ -1,0 +1,35 @@
+komodo:
+  # Publish all joint states -----------------------------------
+  joint_state_controller:
+    type: joint_state_controller/JointStateController
+    publish_rate: 50  
+  
+  # trajectory Controllers ---------------------------------------
+  komodo_arm_trajectory_controller:
+    type: effort_controllers/JointTrajectoryController
+    joints:
+      - komodo_base_rotation_joint
+      - komodo_shoulder_joint
+      - komodo_elbow1_joint
+      - komodo_elbow2_joint
+      - komodo_wrist_joint  
+    gains: # Required because we're controlling an effort interface
+      komodo_base_rotation_joint: {p: 500.0, i: 0.0, d: 0.0}
+      komodo_shoulder_joint:      {p: 500.0, i: 0.0, d: 0.0}
+      komodo_elbow1_joint:        {p: 700.0, i: 0.0, d: 0.0}
+      komodo_elbow2_joint:        {p: 700.0, i: 0.0, d: 0.0}
+      komodo_wrist_joint:         {p: 500.0, i: 0.0, d: 0.0}
+
+  left_finger_controller:
+    type: effort_controllers/JointPositionController
+    joint: komodo_left_finger_joint
+    pid: {p: 500.0, i: 0.0, d: 0.0}
+  right_finger_controller:
+    type: effort_controllers/JointPositionController
+    joint: komodo_right_finger_joint
+    pid: {p: 20.0, i: 0.0, d: 0.0}
+  elevator_controller:
+    type: effort_controllers/JointPositionController
+    joint: komodo_elevator_joint
+    pid: {p: 20.0, i: 0.0, d: 0.0}
+

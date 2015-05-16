@@ -1,0 +1,19 @@
+<launch>
+
+  <!-- GDB functionality -->
+  <arg name="debug" default="false" />
+  <arg unless="$(arg debug)" name="launch_prefix" value="" />
+  <arg     if="$(arg debug)" name="launch_prefix" value="gdb --ex run --args" />
+
+  <group ns="rabota">
+
+    <!-- Load hardware interface -->
+    <node name="rabota_test_trajectory" pkg="rabota_simple_trajectory" type="rabota_test_trajectory"
+          output="screen" >
+      <param name="action_topic" value="/rabota/rabota_arm_trajectory_controller/follow_joint_trajectory"/>
+    </node>
+
+  </group>
+
+</launch>
+

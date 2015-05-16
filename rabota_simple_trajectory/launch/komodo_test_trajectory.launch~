@@ -1,0 +1,19 @@
+<launch>
+
+  <!-- GDB functionality -->
+  <arg name="debug" default="false" />
+  <arg unless="$(arg debug)" name="launch_prefix" value="" />
+  <arg     if="$(arg debug)" name="launch_prefix" value="gdb --ex run --args" />
+
+  <group ns="komodo">
+
+    <!-- Load hardware interface -->
+    <node name="komodo_test_trajectory" pkg="simple_trajectory" type="komodo_test_trajectory"
+          output="screen" launch-prefix="$(arg launch_prefix)">
+      <param name="action_topic" value="/rrbot/position_trajectory_controller/follow_joint_trajectory/"/>
+    </node>
+
+  </group>
+
+</launch>
+

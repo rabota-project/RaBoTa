@@ -1,0 +1,39 @@
+<!-- -*- mode: XML -*- -->
+<launch>
+
+  <!-- load serial conection with arduino -->
+    <node name="rabota_arduino" pkg="rosserial_python" type="serial_node.py" output="screen" >
+      <param name="~port" value="/dev/ttyACM0" />
+    </node>
+
+   <!-- Load fake arduino  --> 
+    <node name="fake_arduino" pkg="rabota_hardware_interface" type="fake_arduino_node"
+          output="screen" />
+ 
+  <group ns="rabota">
+
+    <!-- Load hardware interface -->
+    <node name="rabota_hardware_interface" pkg="rabota_hardware_interface" type="rabota_hardware_main"
+          output="screen" />
+
+    <!-- Load controller settings -->
+    <rosparam file="$(find rabota_hardware_interface)/config/rabota_controllers.yaml" command="load"/>
+
+    <!-- Load controller manager -->
+    <node name="ros_control_controller_manager" pkg="controller_manager" type="controller_manager" respawn="false"
+	  output="screen" args="spawn joint_state_controller
+                                      joint1_position_controller
+                                      joint2_position_controller "/>
+                                 <!-- position_trajectory_controller" /-->
+
+    <!-- Convert joint states to /tf tranforms -->
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
+
+  </group>
+
+  <!-- rviz 
+  <node name="rviz" pkg="rviz" type="rviz"/>
+-->
+
+</launch>
+

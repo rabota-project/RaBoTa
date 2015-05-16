@@ -1,0 +1,74 @@
+#include "ros/ros.h"
+#include "std_msgs/Float64.h"
+#include "std_msgs/Float64MultiArray.h"
+#include "std_msgs/String.h"
+#include "sensor_msgs/JointState.h"
+
+int joints_num = 3;
+
+std_msgs::Float64MultiArray command_input;
+
+
+void commandCallback(const std_msgs::Float64MultiArray::ConstPtr& msg)
+{
+	command_input.data[0] = msg->data[0];
+	command_input.data[1] = msg->data[1];
+	command_input.data[2] = msg->data[2];
+}
+
+int main(int argc, char **argv)
+{
+	ros::init(argc, argv, "arduino");
+
+	ros::NodeHandle n;
+
+	ros::Publisher  joint_state_pub = n.advertise<sensor_msgs::JointState>("rrbot/arduino/joint_states", 10);
+	ros::Subscriber command_sub     = n.subscribe("rrbot/arduino/command", 1000, commandCallback);
+
+	ros::Rate loop_rate(10);
+
+	// init the published message
+	sensor_msgs::JointState msg;
+	msg.header.stamp = ros::Time::now();
+	msg.name.resize(joints_num);
+	msg.position.resize(joints_num);
+	msg.velocity.resize(joints_num);
+	msg.effort.resize(joints_num);
+
+	msg.name[0] = "slider_pris_joint";
+	msg.position[0] = 1;
+	msg.velocity[0] = 1;
+	msg.effort[0]   = 1;
+
+
+	msg.name[1] = "link_1_Rot_joint";
+	msg.position[1] = 2;
+	msg.velocity[1] = 2;
+	msg.effort[1]   = 2;
+
+	msg.name[2] = "link_2_Rot_joint";
+	msg.position[2] = 3;
+	msg.velocity[2] = 3;
+	msg.effort[2]   = 3;
+
+	// init the command_input: resize etc..
+	command_input.data.resize(joints_num);
+	command_input.data[0] = 0;
+	command_input.data[1] = 0;
+        command_input.data[2] = 0;
+
+	while (ros::ok())
+	{
+	// change the angle of the motors
+		msg.position[0] += (1.0/255.0)*command_input.data[0];
+		msg.position[1] += (1.0/255.0)*command_input.data[1];
+		msg.position[2] += (1.0/255.0)*command_input.data[2];
+
+		msg.header.stamp = ros::Time::now();
+		joint_state_pub.publish(msg);
+
+		ros::spinOnce();
+
+		loop_rate.sleep();
+	}
+}

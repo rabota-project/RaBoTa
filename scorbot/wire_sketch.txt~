@@ -1,0 +1,17 @@
+motor 2:
+encoder +:	yellow
+encoder -:	white
+encoder A:	brown+blue
+encoder B:	green
+motor +:	orange+grey
+motor -:	white
+
+motor 3:
+encoder +:	yellow
+encoder -:	white
+encoder A:	orange
+encoder B:	green+brown
+motor +:	orange+green
+motor -:	white
+
+
