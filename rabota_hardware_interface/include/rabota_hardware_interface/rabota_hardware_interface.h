@@ -124,6 +124,7 @@ protected:
 
   int                                          num_joints_;
   int                                          joint_mode_; // position, velocity, or effort
+  int                                          count;
 
   boost::shared_ptr<controller_manager::ControllerManager> controller_manager_;
 

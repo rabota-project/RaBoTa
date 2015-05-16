@@ -38,15 +38,15 @@ void messageCb( const std_msgs::Float64MultiArray& motor_command_msg){
   
 }
 
-ros::Subscriber<std_msgs::Float64MultiArray> sub("arduino/motor_command", &messageCb );
+ros::Subscriber<std_msgs::Float64MultiArray> sub("rabota/arduino/motor_command", &messageCb );
 
 sensor_msgs::JointState robot_state;
-char *a[] = {"motor_1","motor_2"}; 
+char *a[] = {"joint_1","joint_2"}; 
 float pos[2]; 
 float vel[2];
 float eff[2];
 
-ros::Publisher pub("arduino/motor_states", &robot_state);
+ros::Publisher pub("rabota/arduino/motor_states", &robot_state);
 
 //std_msgs::Float64MultiArray check_data;
 //ros::Publisher check_pub("arduino/check_data", &check_data);

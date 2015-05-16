@@ -63,7 +63,7 @@ public:
 : verbose_(verbose)
 {
 		ros::NodeHandle nh_private("~");
-		std::string action_topic = "/rabota/rabota_trajectory_controller/follow_joint_trajectory";
+		std::string action_topic = "/rabota/position_trajectory_controller/follow_joint_trajectory";
 		//    nh_private.getParam("action_topic", action_topic);
 		if (action_topic.empty())
 		{
@@ -117,7 +117,7 @@ public:
 		std::vector<std::string> joint_names;
 
 		// Get joint names
-		nh_.getParam("rabota_trajectory_controller/joints", joint_names);
+		nh_.getParam("position_trajectory_controller/joints", joint_names);
 		//    joint_names = {"aaa","bbb"};
 		if (joint_names.size() == 0)
 		{
@@ -135,37 +135,37 @@ public:
 		trajectory.points[0].positions.resize(joint_names.size());
 		trajectory.points[0].positions[0] = 0; // meter;
 		trajectory.points[0].positions[1] = 0; // rad;
-		trajectory.points[0].positions[2] = 0; // rad;
+		//trajectory.points[0].positions[2] = 0; // rad;
 
 		trajectory.points[0].velocities.resize(joint_names.size());
 		trajectory.points[0].velocities[0] = 0; // meter;
 		trajectory.points[0].velocities[1] = 0; // rad;
-		trajectory.points[0].velocities[2] = 0; // rad;
+		//trajectory.points[0].velocities[2] = 0; // rad;
 
 		trajectory.points[0].time_from_start = ros::Duration(SEC_PER_TRAJ_POINT);
 
 		//point 2
 		trajectory.points[1].positions.resize(joint_names.size());
-		trajectory.points[1].positions[0] = 0.4; // meter;
-		trajectory.points[1].positions[1] = 1.4;   // rad;
-		trajectory.points[1].positions[2] = 2;  // rad;
+		trajectory.points[1].positions[0] = 30; // meter;
+		trajectory.points[1].positions[1] = 30;   // rad;
+		//trajectory.points[1].positions[2] = 2;  // rad;
 
 		trajectory.points[0].velocities.resize(joint_names.size());
 		trajectory.points[0].velocities[0] = 0; // meter;
 		trajectory.points[0].velocities[1] = 0; // rad;
-		trajectory.points[0].velocities[2] = 0; // rad;
+		//trajectory.points[0].velocities[2] = 0; // rad;
 		trajectory.points[1].time_from_start = ros::Duration(2*SEC_PER_TRAJ_POINT);
 
 		//point 3
 		trajectory.points[2].positions.resize(joint_names.size());
-		trajectory.points[2].positions[0] = 0.1; // meter;
-		trajectory.points[2].positions[1] = 0.5;   // rad;
-		trajectory.points[2].positions[2] = -1;  // rad;
+		trajectory.points[2].positions[0] = -30; // meter;
+		trajectory.points[2].positions[1] = -30;   // rad;
+		//trajectory.points[2].positions[2] = -1;  // rad;
 
 		trajectory.points[0].velocities.resize(joint_names.size());
 		trajectory.points[0].velocities[0] = 0; // meter;
 		trajectory.points[0].velocities[1] = 0; // rad;
-		trajectory.points[0].velocities[2] = 0; // rad;
+		//trajectory.points[0].velocities[2] = 0; // rad;
 
 		trajectory.points[2].time_from_start = ros::Duration(3*SEC_PER_TRAJ_POINT);
 
