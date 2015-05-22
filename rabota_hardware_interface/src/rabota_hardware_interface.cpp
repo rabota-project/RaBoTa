@@ -79,6 +79,12 @@ void RabotaHardwareInterface::arduinoCallback(const sensor_msgs::JointState::Con
 	joint_effort_[0]   = msg->effort[0];
 
 	joint_position_[1] = msg->position[1];
+	joint_velocity_[1] = msg->velocity[1];
+	joint_effort_[1]   = msg->effort[1];
+
+	joint_position_[2] = msg->position[2];
+	joint_velocity_[2] = msg->velocity[2];
+	joint_effort_[2]   = msg->effort[2];
 
 //	joint_velocity_temp_[1] = msg->velocity[1];
 //	joint_effort_temp_[1]   = msg->effort[1];
@@ -111,6 +117,7 @@ void RabotaHardwareInterface::init()
 
 	joint_position_command_[0] = 0;
 	joint_position_command_[1] = 0;
+	joint_position_command_[2] = 0;
 
 
 //	joint_position_temp_.resize(num_joints_);
@@ -162,8 +169,7 @@ void RabotaHardwareInterface::update(const ros::TimerEvent& e)
 	// Output
 	write(elapsed_time_);
 
-	ROS_INFO("here %d",count++);
-
+	//ROS_INFO("here %d",count++);
 
 }
 
@@ -186,11 +192,12 @@ void RabotaHardwareInterface::read()
 void RabotaHardwareInterface::write(ros::Duration elapsed_time)
 {
 	std_msgs::Float64MultiArray msg;
-	msg.data.resize(2);
+	msg.data.resize(3);
 //	msg.data.push_back(joint_position_command_[0]);
 //	msg.data.push_back(joint_position_command_[1]);
 	msg.data[0] = joint_position_command_[0];
 	msg.data[1] = joint_position_command_[1];
+	msg.data[2] = joint_position_command_[2];
 
 
 //	p_error_ = joint_position_command_[0] - joint_position_[0];

@@ -4,6 +4,7 @@ hardware_interface:
    joints:
       - joint_1
       - joint_2
+      - joint_3
 
 # Publish all joint states ----------------------------------
 joint_state_controller:
@@ -28,6 +29,7 @@ position_trajectory_controller:
    joints:
       - joint_1
       - joint_2
+      - joint_3
    constraints:
       goal_time: 5.0
       #stopped_position_tolerance: 0.4 # Defaults to 0.01
@@ -35,6 +37,9 @@ position_trajectory_controller:
           trajectory: 0.60
           goal:       0.15
       joint_2:
+          trajectory: 0.60
+          goal:       0.15
+      joint_3:
           trajectory: 0.60
           goal:       0.15
    # gains:

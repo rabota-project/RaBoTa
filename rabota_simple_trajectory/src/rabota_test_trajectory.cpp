@@ -48,7 +48,7 @@ namespace rabota_test
 
 static const double MAX_JOINT_VALUE = M_PI; // continuous
 static const double MIN_JOINT_VALUE = -M_PI; // continuous
-static const double SEC_PER_TRAJ_POINT = 2; // time between points
+static const double SEC_PER_TRAJ_POINT = 4; // time between points
 static const std::size_t TRAJ_POINTS = 10; // number of points to generate
 
 class TestTrajectory
@@ -118,7 +118,7 @@ public:
 
 		// Get joint names
 		nh_.getParam("position_trajectory_controller/joints", joint_names);
-		//    joint_names = {"aaa","bbb"};
+		
 		if (joint_names.size() == 0)
 		{
 			ROS_FATAL_STREAM_NAMED("init","Not joints found on parameter server for controller, did you load the proper yaml file?");
@@ -130,44 +130,54 @@ public:
 		trajectory.joint_names = joint_names;
 
 
-		trajectory.points.resize(3);
+		trajectory.points.resize(4);
 		//point 1
 		trajectory.points[0].positions.resize(joint_names.size());
 		trajectory.points[0].positions[0] = 0; // meter;
 		trajectory.points[0].positions[1] = 0; // rad;
-		//trajectory.points[0].positions[2] = 0; // rad;
+		trajectory.points[0].positions[2] = 0; // rad;
 
 		trajectory.points[0].velocities.resize(joint_names.size());
 		trajectory.points[0].velocities[0] = 0; // meter;
 		trajectory.points[0].velocities[1] = 0; // rad;
-		//trajectory.points[0].velocities[2] = 0; // rad;
-
+		trajectory.points[0].velocities[2] = 0; // rad;
 		trajectory.points[0].time_from_start = ros::Duration(SEC_PER_TRAJ_POINT);
 
 		//point 2
 		trajectory.points[1].positions.resize(joint_names.size());
-		trajectory.points[1].positions[0] = 30; // meter;
-		trajectory.points[1].positions[1] = 30;   // rad;
-		//trajectory.points[1].positions[2] = 2;  // rad;
+		trajectory.points[1].positions[0] = 18; // meter;
+		trajectory.points[1].positions[1] = 18;   // rad;
+		trajectory.points[1].positions[2] = -10;  // rad;
 
-		trajectory.points[0].velocities.resize(joint_names.size());
-		trajectory.points[0].velocities[0] = 0; // meter;
-		trajectory.points[0].velocities[1] = 0; // rad;
-		//trajectory.points[0].velocities[2] = 0; // rad;
+		trajectory.points[1].velocities.resize(joint_names.size());
+		trajectory.points[1].velocities[0] = 0; // meter;
+		trajectory.points[1].velocities[1] = 0; // rad;
+		trajectory.points[1].velocities[2] = 0; // rad;
 		trajectory.points[1].time_from_start = ros::Duration(2*SEC_PER_TRAJ_POINT);
 
 		//point 3
 		trajectory.points[2].positions.resize(joint_names.size());
-		trajectory.points[2].positions[0] = -30; // meter;
-		trajectory.points[2].positions[1] = -30;   // rad;
-		//trajectory.points[2].positions[2] = -1;  // rad;
+		trajectory.points[2].positions[0] = -10; // meter;
+		trajectory.points[2].positions[1] = -5;   // rad;
+		trajectory.points[2].positions[2] = 10;  // rad;
 
-		trajectory.points[0].velocities.resize(joint_names.size());
-		trajectory.points[0].velocities[0] = 0; // meter;
-		trajectory.points[0].velocities[1] = 0; // rad;
-		//trajectory.points[0].velocities[2] = 0; // rad;
-
+		trajectory.points[2].velocities.resize(joint_names.size());
+		trajectory.points[2].velocities[0] = 0; // meter;
+		trajectory.points[2].velocities[1] = 0; // rad;
+		trajectory.points[2].velocities[2] = 0; // rad;
 		trajectory.points[2].time_from_start = ros::Duration(3*SEC_PER_TRAJ_POINT);
+
+		//point 4
+		trajectory.points[3].positions.resize(joint_names.size());
+		trajectory.points[3].positions[0] = 0; // meter;
+		trajectory.points[3].positions[1] = 0;   // rad;
+		trajectory.points[3].positions[2] = 0;  // rad;
+
+		trajectory.points[3].velocities.resize(joint_names.size());
+		trajectory.points[3].velocities[0] = 0; // meter;
+		trajectory.points[3].velocities[1] = 0; // rad;
+		trajectory.points[3].velocities[2] = 0; // rad;
+		trajectory.points[3].time_from_start = ros::Duration(4*SEC_PER_TRAJ_POINT);
 
 		// Create trajectory with x points
 //		trajectory.points.resize(TRAJ_POINTS);

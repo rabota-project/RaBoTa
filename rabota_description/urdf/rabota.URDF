@@ -90,8 +90,8 @@
     </collision>
   </link>
   <joint
-    name="slider_pris_joint"
-    type="fixed">
+    name="joint_3"
+    type="revolute">
     <origin
       xyz="0.035 0 0.065"
       rpy="0 0 0" />
