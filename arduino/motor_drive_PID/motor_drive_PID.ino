@@ -38,48 +38,36 @@ double m1_Setpoint, m1_Input, m1_Output;
 double m2_Setpoint, m2_Input, m2_Output;
 double m3_Setpoint, m3_Input, m3_Output;
 
-//Specify the links and initial tuning parameters
+//Specify the PID and initial tuning parameters
 PID m1_PID(&m1_Input, &m1_Output, &m1_Setpoint,255,0,0, DIRECT);
 PID m2_PID(&m2_Input, &m2_Output, &m2_Setpoint,255,0,0, DIRECT);
 PID m3_PID(&m3_Input, &m3_Output, &m3_Setpoint,255,0,0, DIRECT);
 
+// define the commands subscriber
 void messageCb( const std_msgs::Float64MultiArray& motor_command_msg){
   m1_Setpoint = motor_command_msg.data[0];
   m2_Setpoint = motor_command_msg.data[1];
   m3_Setpoint = motor_command_msg.data[2];
 }
+ros::Subscriber<std_msgs::Float64MultiArray> sub("rabota/arduino/motors_command", &messageCb );
 
-ros::Subscriber<std_msgs::Float64MultiArray> sub("rabota/arduino/motor_command", &messageCb );
-
-sensor_msgs::JointState robot_state;
-char *a[] = {"joint_1","joint_2","joint_3"}; 
 float pos[number_of_motors]; 
 float vel[number_of_motors];
 float eff[number_of_motors];
 
-ros::Publisher pub("rabota/arduino/motor_states", &robot_state);
-
-//std_msgs::Float64MultiArray check_data;
-//ros::Publisher check_pub("arduino/check_data", &check_data);
+std_msgs::Float64MultiArray motors_state;
+ros::Publisher motors_state_pub("rabota/arduino/motors_state", &motors_state);
 
 
 void setup()
 {
   nh.initNode();
   nh.subscribe(sub);
-  nh.advertise(pub);
+  nh.advertise(motors_state_pub);
 
-  robot_state.header.frame_id = "motors";
-  robot_state.name_length = number_of_motors;
-  robot_state.velocity_length = number_of_motors;
-  robot_state.position_length = number_of_motors; /// here used for arduino time
-  robot_state.effort_length = number_of_motors; /// here used for arduino time
-
-  robot_state.name = a;
-  robot_state.position = pos;
-  robot_state.velocity = vel;
-  robot_state.effort = eff;
-
+  motors_state.data_length = number_of_motors;
+  motors_state.data = pos;
+  
   //initialize the variables we're linked to
   m1_Input = m1_Enc.read()*360/2554;
   m1_Setpoint = 0;
@@ -129,7 +117,7 @@ void setup()
   digitalWrite(m3_IN1_PIN, LOW);
   digitalWrite(m3_IN2_PIN, LOW);
   
-  //Serial.begin (9600);
+ // Serial.begin (9600);
 }
 
 void loop()
@@ -153,15 +141,13 @@ void loop()
   eff[1] = m2_Output;
   eff[2] = m3_Output;
   
-  robot_state.header.stamp = nh.now();
-  robot_state.position = pos;
-  robot_state.effort = eff;
-
+  motors_state.data = pos;
+  
   //Serial.print("motor 1: Setpoint=");  Serial.print(m1_Setpoint); Serial.print("     Input=");  Serial.print(m1_Input);  Serial.print("     Output=");  Serial.println(m1_Output); //angles
   //Serial.print("motor 2: Setpoint=");  Serial.print(m2_Setpoint); Serial.print("     Input=");  Serial.print(m2_Input);  Serial.print("     Output=");  Serial.println(m2_Output); //angles
   //Serial.print("motor 3: Setpoint=");  Serial.print(m3_Setpoint); Serial.print("     Input=");  Serial.print(m3_Input);  Serial.print("     Output=");  Serial.println(m3_Output); //angles
   
-  //motor 1
+  //-----------------------------------------------motor 1
   if (m1_Output<0) {
       digitalWrite(m1_EN_PIN, HIGH);
       digitalWrite(m1_IN1_PIN, LOW);
@@ -175,7 +161,7 @@ void loop()
       analogWrite(m1_D2_PIN, m1_Output);
   }
   
-  //motor 2
+  //-----------------------------------------------motor 2
   if (m2_Output<0) {
       digitalWrite(m2_IN1_PIN, LOW);
       digitalWrite(m2_IN2_PIN, HIGH);
@@ -187,7 +173,7 @@ void loop()
       analogWrite(m2_D2_PIN, m2_Output);
   }
   
-  //motor 3
+  //-------------------------------------------------motor 3
   if (m3_Output<0) {
       digitalWrite(m3_IN1_PIN, LOW);
       digitalWrite(m3_IN2_PIN, HIGH);
@@ -199,7 +185,8 @@ void loop()
       analogWrite(m3_D2_PIN, m3_Output);
   }
   
-  pub.publish( &robot_state );
-//  check_pub.publish( &check_data );
+  //-------------------------------------------------
+  //pub.publish( &robot_state );
+  motors_state_pub.publish( &motors_state);
   delay(5);
 }

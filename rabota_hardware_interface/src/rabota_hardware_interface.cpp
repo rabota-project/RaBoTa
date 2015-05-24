@@ -63,32 +63,28 @@ RabotaHardwareInterface::RabotaHardwareInterface(ros::NodeHandle& nh)
 	ROS_INFO_NAMED("hardware_interface", "Loaded generic_hardware_interface.");
 
 	ROS_INFO("here 3");
-
 }
 
 RabotaHardwareInterface::~RabotaHardwareInterface()
 {
 }
 
-void RabotaHardwareInterface::arduinoCallback(const sensor_msgs::JointState::ConstPtr& msg)
+//void RabotaHardwareInterface::arduinoCallback(const sensor_msgs::JointState::ConstPtr& msg)
+void RabotaHardwareInterface::arduinoCallback(const std_msgs::Float64MultiArray::ConstPtr& msg)
 {
 //	ROS_INFO("hello world \n I heard: %f" , msg->position[0]);
 
-	joint_position_[0] = msg->position[0];
-	joint_velocity_[0] = msg->velocity[0];
-	joint_effort_[0]   = msg->effort[0];
+	joint_position_[0] = msg->data[0];
+	joint_velocity_[0] = 0;
+	joint_effort_[0]   = 0;
 
-	joint_position_[1] = msg->position[1];
-	joint_velocity_[1] = msg->velocity[1];
-	joint_effort_[1]   = msg->effort[1];
+	joint_position_[1] = msg->data[1];
+	joint_velocity_[1] = 0;
+	joint_effort_[1]   = 0;
 
-	joint_position_[2] = msg->position[2];
-	joint_velocity_[2] = msg->velocity[2];
-	joint_effort_[2]   = msg->effort[2];
-
-//	joint_velocity_temp_[1] = msg->velocity[1];
-//	joint_effort_temp_[1]   = msg->effort[1];
-
+	joint_position_[2] = msg->data[2];
+	joint_velocity_[2] = 0;
+	joint_effort_[2]   = 0;
 
 //	ROS_INFO("on arduino callback I heard: [j0 j1 ] = [ %f  %f  ]",joint_position_[0],joint_position_[1]);
 
@@ -96,8 +92,8 @@ void RabotaHardwareInterface::arduinoCallback(const sensor_msgs::JointState::Con
 
 void RabotaHardwareInterface::init()
 {
-	command_pub_ = nh_.advertise<std_msgs::Float64MultiArray>("arduino/motor_command", 10);
-	joints_angle_sub_ = nh_.subscribe("arduino/motor_states", 10, &RabotaHardwareInterface::arduinoCallback , this);
+	command_pub_ = nh_.advertise<std_msgs::Float64MultiArray>("arduino/motors_command", 10);
+	joints_angle_sub_ = nh_.subscribe("arduino/motors_state", 10, &RabotaHardwareInterface::arduinoCallback , this);
 
 	// Get joint names
 	nh_.getParam("hardware_interface/joints", joint_names_);
@@ -118,14 +114,6 @@ void RabotaHardwareInterface::init()
 	joint_position_command_[0] = 0;
 	joint_position_command_[1] = 0;
 	joint_position_command_[2] = 0;
-
-
-//	joint_position_temp_.resize(num_joints_);
-//	joint_velocity_temp_.resize(num_joints_);
-//	joint_effort_temp_.resize(num_joints_);
-//	joint_position_command_temp_.resize(num_joints_);
-//	joint_velocity_command_temp_.resize(num_joints_);
-//	joint_effort_command_temp_.resize(num_joints_);
 
 //	nh_.getParam("joint1_position_controller/pid",gains);
 
@@ -193,8 +181,7 @@ void RabotaHardwareInterface::write(ros::Duration elapsed_time)
 {
 	std_msgs::Float64MultiArray msg;
 	msg.data.resize(3);
-//	msg.data.push_back(joint_position_command_[0]);
-//	msg.data.push_back(joint_position_command_[1]);
+
 	msg.data[0] = joint_position_command_[0];
 	msg.data[1] = joint_position_command_[1];
 	msg.data[2] = joint_position_command_[2];

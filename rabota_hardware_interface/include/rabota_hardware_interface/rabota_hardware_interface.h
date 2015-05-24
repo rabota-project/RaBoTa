@@ -82,7 +82,9 @@ public:
   /// \brief write the command to the robot hardware.
   void write(ros::Duration elapsed_time);
 
-  void arduinoCallback(const sensor_msgs::JointState::ConstPtr& msg);
+  void arduinoCallback(const std_msgs::Float64MultiArray::ConstPtr& msg);
+//  void arduinoCallback(const sensor_msgs::JointState::ConstPtr& msg); //---------------------old one
+
 
 
 protected:
