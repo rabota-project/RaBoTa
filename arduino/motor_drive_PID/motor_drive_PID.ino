@@ -39,9 +39,9 @@ double m2_Setpoint, m2_Input, m2_Output;
 double m3_Setpoint, m3_Input, m3_Output;
 
 //Specify the PID and initial tuning parameters
-PID m1_PID(&m1_Input, &m1_Output, &m1_Setpoint,1255,0,0, DIRECT);
-PID m2_PID(&m2_Input, &m2_Output, &m2_Setpoint,255,0,0, DIRECT);
-PID m3_PID(&m3_Input, &m3_Output, &m3_Setpoint,255,0,0, DIRECT);
+PID m1_PID(&m1_Input, &m1_Output, &m1_Setpoint,4255,0,0, DIRECT);
+PID m2_PID(&m2_Input, &m2_Output, &m2_Setpoint,4255,0,0, DIRECT);
+PID m3_PID(&m3_Input, &m3_Output, &m3_Setpoint,4255,0,0, DIRECT);
 
 // define the commands subscriber
 void messageCb( const std_msgs::Float64MultiArray& motor_command_msg){
@@ -124,13 +124,13 @@ void loop()
 {
   nh.spinOnce();
 
-  m1_Input = 2*3.14159*m1_Enc.read()/20/4/127.1/5; // 2*pi*tics/ticspercircle/CPR?/motorgearratio/armgearratio
+  m1_Input = 2*3.14159*m1_Enc.read()/20/4/127.1/5; // 2*pi*tics/windowspercircle/ticsperwindow/motorgearratio/armgearratio rad
   m1_PID.Compute();
 
-  m2_Input = m2_Enc.read()*2*3.14159/(127.1*20);//*(24.0/120); ///2554; //rad
+  m2_Input = 2*3.14159*m2_Enc.read()/20/4/127.1/4; // 2*pi*tics/windowspercircle/ticsperwindow/motorgearratio/armgearratio rad
   m2_PID.Compute();
 
-  m3_Input = m3_Enc.read()*2*3.14159*0.2/(127.1*20);//*(24.0/120); ///2554; //rad
+  m3_Input = 2*3.14159*m3_Enc.read()/20/4/127.1/4; // ToDo - take in acount second gear ratio
   m3_PID.Compute();
 
   pos[0] = double(m1_Input);
